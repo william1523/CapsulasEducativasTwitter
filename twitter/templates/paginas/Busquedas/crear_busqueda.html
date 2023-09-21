@@ -1,0 +1,29 @@
+<div class="modal-dialog" role="document">
+    <div class="modal-content" >
+      <!--action="{% url 'twitter:crear_busqueda' id_tema %}   method="post" enctype="multipart/form-data"" -->  
+      <form  action="{% url 'twitter:crear_busqueda' id_tema %}" method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+  
+      
+      <div class="modal-header">
+        <h2 class="modal-title">Realizar Busqueda</h2>
+        <!-- <button class="close" type="button" aria-dismiss = "modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        
+      </div>
+      <div class="modal-body">
+         {{ form.as_p}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <!-- <button type="submit" class="btn btn-primary">Guardar</button> -->
+        <input type="submit" value="Guardar" class="btn btn-primary">
+      </div>
+    </form>
+  
+    </div>
+  
+  </div>
+  

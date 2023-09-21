@@ -1,0 +1,129 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Temas {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <button  type="button" class="btn btn-primary" onclick="abrir_modal_nuevo('{% url 'twitter:crear_tema'  %}')">
+          Crear Nuevo Tema
+        </button>
+        {% if temas %}
+        <div class="card-header pb-0">
+          <h6>Temas para capsulas educativas</h6>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table table-stripped align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tema</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Fecha Creación
+                  </th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Descripción</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Autor</th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for tema in temas %}
+                <tr>
+                  <td>
+                    <h6 class="mb-0 text-sm">{{tema.tema}}</h6>
+                  </td>
+                  <td>
+                    <h6 class="mb-0 text-sm">{{tema.fcreacion}}</h6>
+                  </td>
+                  <td>
+                    <h6 class="mb-0 text-sm">{{tema.descripcion}}</h6>
+                  </td>
+                  <td>
+                    <h6 class="mb-0 text-sm">{{tema.autor}}</h6>
+                  </td>
+                  <td>
+                    <button  type="button" class="btn btn-primary" onclick="abrir_modal_nuevo('{% url 'twitter:editar_tema'  tema.id %}')">
+                      Editar
+                    </button>
+        
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+
+            {% else %}
+            <div class="card-header pb-0">
+              <h6>No hay Temas para capsulas educativas</h6>
+            </div>
+
+            {% endif%}
+
+          
+            </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "includes/footer.html" %}
+
+</div>
+
+<div class="modal fade" id="ModalNuevo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="contenido" class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+
+<script>
+  var $ = jQuery.noConflict();
+  var win = navigator.platform.indexOf('Win') > -1;
+  if (win && document.querySelector('#sidenav-scrollbar')) {
+    var options = {
+      damping: '0.5'
+    }
+    Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+  }
+  function abrir_modal_nuevo(url){
+    $('#ModalNuevo').load(url,function(){
+      $(this).modal('show');
+    });
+  }
+</script>
+
+{% endblock javascripts %}

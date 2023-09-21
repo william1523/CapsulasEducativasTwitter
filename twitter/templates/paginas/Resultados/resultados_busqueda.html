@@ -1,0 +1,156 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Resultados de Busqueda {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <!--onclick="abrir_modal_nuevo('{% url 'twitter:crear_busqueda' tema.id %}')" >-->
+       <!--
+        <button  type="button" class="btn btn-primary" >
+        
+          Nueva Busqueda
+        </button>
+      -->
+        {% if resultados %}
+        <div class="card-header pb-0">
+          <h6>Tema : {{tema}}</h6>
+          <h6>Busqueda : {{busqueda}}</h6>
+          <h6>Query : {{busqueda.query}} </h6>
+          <h6>Resultados {{busqueda.numero_resultados}}</h6>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive-lg">
+            <table class="table table-stripped align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Autor</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Texto
+                  </th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"># Me Gusta</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"># Retweets</th>
+                  
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for tweet in resultados %}
+                <tr>
+                  <td>
+                    <h6 class="mb-0 text-sm">{{tweet.autor}}</h6>
+                  </td>
+                  <td>
+                    <div class="mb-0 text-sm text-wrap" style="width: 50rem;">
+                      {{tweet.texto}}
+                    </div>
+                  </td>
+      
+                  <td>
+                    <h6 class="mb-0 text-sm">{{tweet.fcreacion|date:'d-m-Y'}}</h6>
+                  </td>
+                  
+                  <td>
+                    <h6 class="mb-0 text-sm">{{tweet.megusta}}</h6>
+                  </td>
+                  <td>
+                    <h6 class="mb-0 text-sm">{{tweet.retweets}}</h6>
+                  </td>
+                
+                  
+                  
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% if is_paginated %}
+
+
+            
+  <ul class="pagination">
+    <li class="page-item">
+      {% if page_obj.has_previous %}
+      <li class="page-item "><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled page-item"><span class="page-link"> &laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <!-- <li class="page-item active"><span>{{ i }} <a class="sr-only page-link"">(current)</span></span></li> -->
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ i }}</span>
+          </li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+    {% endif %}
+
+    </li>
+  </ul>
+{% endif %}
+
+
+            {% else %}
+            <div class="card-header pb-0">
+              <h6>No hay resultados para busquedas.</h6>
+            </div>
+
+            {% endif%}
+
+
+
+          
+            </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "includes/footer.html" %}
+
+</div>
+
+<div class="modal fade" id="ModalNuevo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+</div>
+
+
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+
+<script>
+  var $ = jQuery.noConflict();
+  var win = navigator.platform.indexOf('Win') > -1;
+  if (win && document.querySelector('#sidenav-scrollbar')) {
+    var options = {
+      damping: '0.5'
+    }
+    Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+  }
+  function abrir_modal_nuevo(url){
+    $('#ModalNuevo').load(url,function(){
+      $(this).modal('show');
+    });
+  }
+
+</script>
+
+{% endblock javascripts %}

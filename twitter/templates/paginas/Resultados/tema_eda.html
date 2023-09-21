@@ -1,0 +1,372 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Resultados de Busqueda {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css"
+  href="https://cdn.jsdelivr.net/gh/bmabey/pyLDAvis@3.4.0/pyLDAvis/js/ldavis.v1.0.0.css">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+
+        {% if resultados %}
+        <div class="card-header pb-0">
+          <h6>Tema : {{tema}}</h6>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2" id="content">
+          <div class="row mt-4">
+            <div class="col-xl-3 col-sm-6">
+              <div class="card">
+                <div class="card-body p-3">
+                  <div class="row">
+                    <div class="col-9">
+                      <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample">
+                        Generar Guion
+                      </button>
+                      <p> Generar Guion</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+              <div class="card">
+                <div class="card-body p-3">
+                  <div class="row">
+                    <div class="col-9">
+                      <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample">
+                        Analis&iacute;s exploratorio
+                      </button>
+                      <p> Analisis exploratorio de datos</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+              <div class="card">
+                <div class="card-body p-3">
+                  <div class="row">
+                    <div class="col-9">
+                      <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        World Cloud
+                      </button>
+                      <p> Mostrar World Cloud</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+              <div class="card">
+                <div class="card-body p-3">
+                  <div class="row">
+                    <div class="col-9">
+                      <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
+                        ldavis
+                      </button>
+                      <p> Mostrar Visualizaci&oacute;n LDA</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="collapse" id="collapseExample4">
+          </div>  
+
+            
+          <div class="collapse" id="collapseExample3">
+            <div class="card card-body overflow-scroll" style="height: 400px;">
+              <textarea id="textArea" rows="40" readonly >
+                {{texto_guion}}
+             </textarea>
+             <button type="button" value="Guardar" onclick="saveTextAsFile()"> Save</button>
+            </div>
+          </div>
+
+          <div class="collapse" id="collapseExample">
+            <img src="data:image/png;base64,{{imgb64}}" alt="imagen" id="img">
+          </div>
+          <div class="collapse" id="collapseExample2">
+            <div class="card card-body">
+              <div id="ldavis_el238255882063043980095398" style="height: 600px; overflow:auto; background-color:white;">
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-4">
+          
+            <div class="col-lg-5 mb-lg-0 mb-4">
+              <div class="card-body p-3">
+                <h6 class="ms-2 mt-4 mb-0"> Hashtags usados </h6>
+                <div class="border-radius-lg py-3 pe-1 mb-3">
+                  <div class="chart">
+                    <canvas id="chart-hashtags" class="chart-canvas" height="300px"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="col-lg-5 mb-lg-0 mb-4">
+              <div class="card-body p-3">
+                <h6 class="ms-2 mt-4 mb-0"> bigramas m&aacute;s usados </h6>
+                <div class="border-radius-lg py-3 pe-1 mb-3">
+                  <div class="chart">
+                    <canvas id="chart-topbigramas" class="chart-canvas" height="300px"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          
+          
+          
+            <div class="col-lg-5 mb-lg-0 mb-4">
+              <div class="card-body p-3">
+                <h6 class="ms-2 mt-4 mb-0"> Palabras m&aacute;s usadas </h6>
+                <div class="border-radius-lg py-3 pe-1 mb-3">
+                  <div class="chart">
+                    <canvas id="chart-topwords" class="chart-canvas" height="300px"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="col-lg-5 mb-lg-0 mb-4">
+              <div class="card-body p-3">
+                <h6 class="ms-2 mt-4 mb-0"> Coherencia LDA </h6>
+                <div class="border-radius-lg py-3 pe-1 mb-3">
+                  <div class="chart">
+                    <canvas id="chart-coherencia" class="chart-canvas" height="300px"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        {% else %}
+        <div class="card-header pb-0">
+          <h6>No hay resultados para busquedas.</h6>
+        </div>
+        {% endif%}
+      </div>
+    </div>
+  </div>
+  {% include "includes/footer.html" %}
+
+</div>
+
+
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+
+{{ json|json_script:"json_data" }}
+{{ json_1|json_script:"json_data1" }}
+{{ json_2|json_script:"json_data2" }}
+{{ json_3|json_script:"json_data3" }}
+{{ json_4|json_script:"json_data4" }}
+
+
+
+<script type="text/javascript">
+  //se coloca 2 veces JSON pars, para que devuelva unobjeto a la primera devuelve un string
+  var ldavis_el238255882063043980095398_data = JSON.parse(JSON.parse(document.getElementById("json_data").textContent));
+
+  function LDAvis_load_lib(url, callback) {
+    var s = document.createElement('script');
+    s.src = url;
+    s.async = true;
+    s.onreadystatechange = s.onload = callback;
+    s.onerror = function () { console.warn("failed to load library " + url); };
+    document.getElementsByTagName("head")[0].appendChild(s);
+  }
+
+  if (typeof (LDAvis) !== "undefined") {
+    // already loaded: just create the visualization
+    !function (LDAvis) {
+      new LDAvis("#" + "ldavis_el238255882063043980095398", ldavis_el238255882063043980095398_data);
+    }(LDAvis);
+  } else if (typeof define === "function" && define.amd) {
+    // require.js is available: use it to load d3/LDAvis
+    require.config({ paths: { d3: "https://d3js.org/d3.v5" } });
+    require(["d3"], function (d3) {
+      window.d3 = d3;
+      LDAvis_load_lib("https://cdn.jsdelivr.net/gh/bmabey/pyLDAvis@3.4.0/pyLDAvis/js/ldavis.v3.0.0.js", function () {
+        new LDAvis("#" + "ldavis_el238255882063043980095398", ldavis_el238255882063043980095398_data);
+      });
+    });
+  } else {
+    // require.js not available: dynamically load d3 & LDAvis
+    LDAvis_load_lib("https://d3js.org/d3.v5.js", function () {
+      LDAvis_load_lib("https://cdn.jsdelivr.net/gh/bmabey/pyLDAvis@3.4.0/pyLDAvis/js/ldavis.v3.0.0.js", function () {
+        new LDAvis("#" + "ldavis_el238255882063043980095398", ldavis_el238255882063043980095398_data);
+      })
+    });
+  }
+</script>
+
+<script src="/static/assets/js/plugins/chartjs.min.js"></script>
+<script src="/static/assets/js/plugins/Chart.extension.js"></script>
+<script>
+  var ctx = document.getElementById("chart-coherencia").getContext("2d");
+  var data1 = JSON.parse(JSON.parse(document.getElementById("json_data1").textContent));
+
+  new Chart(ctx, {
+    type: "line",
+    data: data1,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Coherencia LDA por # de topicos'
+        }
+      }
+    },
+  });
+
+  var ctx2 = document.getElementById("chart-topwords").getContext("2d");
+  var data2 = JSON.parse(JSON.parse(document.getElementById("json_data2").textContent));
+
+  new Chart(ctx2, {
+    type: "bar",
+    data: data2,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Top Words'
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            maxRotation: 90,
+            minRotation: 90
+          }
+        }
+      }
+    },
+  });
+
+  var ctx3 = document.getElementById("chart-topbigramas").getContext("2d");
+  var data3 = JSON.parse(JSON.parse(document.getElementById("json_data3").textContent));
+
+  new Chart(ctx3, {
+    type: "bar",
+    data: data3,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Top Bigramas'
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            maxRotation: 90,
+            minRotation: 90
+          }
+        }
+      }
+    },
+  });
+
+  var ctx4 = document.getElementById("chart-hashtags").getContext("2d");
+  var data4 = JSON.parse(JSON.parse(document.getElementById("json_data4").textContent));
+
+  new Chart(ctx4, {
+    type: "bar",
+    data: data4,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Hashtags'
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            maxRotation: 90,
+            minRotation: 90
+          }
+        }
+      }
+    },
+  });
+
+  function saveTextAsFile() {
+  var textToWrite = document.getElementById('textArea').innerHTML;
+  var textFileAsBlob = new Blob([ textToWrite ], { type: 'text/plain' });
+  var fileNameToSaveAs = "guion.txt"; //filename.extension
+
+  var downloadLink = document.createElement("a");
+  downloadLink.download = fileNameToSaveAs;
+  downloadLink.innerHTML = "Descargar a";
+  if (window.webkitURL != null) {
+    // Chrome allows the link to be clicked without actually adding it to the DOM.
+    downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+  } else {
+    // Firefox requires the link to be added to the DOM before it can be clicked.
+    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+    downloadLink.onclick = destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+  }
+
+  downloadLink.click();
+}
+
+var button = document.getElementById('save');
+button.addEventListener('click', saveTextAsFile);
+
+function destroyClickedElement(event) {
+  // remove the link from the DOM
+  document.body.removeChild(event.target);
+}
+</script>
+
+{% endblock javascripts %}

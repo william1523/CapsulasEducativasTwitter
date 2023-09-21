@@ -1,0 +1,16 @@
+Django==4.1.6
+python-decouple==3.7
+psycopg2-binary==2.9.5
+tweepy==4.10.0
+openai==0.27.2
+chromedriver-autoinstaller
+pandas
+nltk
+scikit-learn
+mglearn
+wordcloud
+pyLDAvis
+gensim
+sentiment-analysis-spanish
+#!python -m spacy download es_core_news_sm
+openai

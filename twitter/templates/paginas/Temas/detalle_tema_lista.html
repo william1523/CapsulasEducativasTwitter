@@ -1,0 +1,175 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} {{ tema }} {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-lg-7 mb-lg-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="d-flex flex-column h-100">
+                <p class="text-lg mb-1 pt-2 text-bold">Creado por: {{tema}}</p>
+                <h4 class="font-weight-bolder">{{tema.tema}}</h4>
+                <p class="mb-5">{{tema.descripcion}}</p>
+                <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
+                  Read More
+                  <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
+              <div class="bg-gradient-primary border-radius-lg h-100">
+                <img src="/static/assets/img/shapes/waves-white.svg" class="position-absolute h-100 w-50 top-0 d-lg-block d-none" alt="waves">
+                <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                  <img class="w-100 position-relative z-index-2 pt-4" src="/static/assets/img/illustrations/rocket-white.png">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card h-100">
+        <div class="overflow-hidden position-relative border-radius-xl bg-cover h-100" style="background-image: url('/static/assets/img/ivancik.jpg');">
+          <span class="mask bg-gradient-dark"></span>
+          <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
+            <h5 class="text-white font-weight-bolder mb-4 pt-2">Work with the rockets</h5>
+            <p class="text-white">Wealth creation is an evolutionarily recent positive-sum game. It is all about who take the opportunity first.</p>
+            <a class="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">
+              Read More
+              <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  </div>
+</div>
+
+<legend>
+  <h1>
+      {{tema.tema}}
+  </h1>
+</legend>
+{% if error_message %}
+<p>
+  <strong>{{ error_message }}</strong>
+</p>
+{% endif %}
+
+
+{% if busquedas %}
+<div class="card-header pb-0">
+  <h6>Detalle de Busquedas realizadas</h6>
+</div>
+<div class="card-body px-0 pt-0 pb-2">
+  <div class="table-responsive p-0">
+    <table class="table table-stripped align-items-center mb-0">
+      <thead>
+        <tr>
+          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tema</th>
+          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Fecha Creación
+          </th>
+          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+            Descripción</th>
+          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Autor</th>
+          <th class="text-secondary opacity-7"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for busqueda in busquedas %}
+        <tr>
+          <td>
+            <h6 class="mb-0 text-sm">{{busqueda.query}}</h6>
+          </td>
+          <td>
+            <h6 class="mb-0 text-sm">{{busqueda.fbusqueda|date:'d-m-Y'}}</h6>
+          </td>
+          <td>
+            <div class="mb-0 text-sm text-wrap" style="width: 20rem;">
+              {{busqueda.descripcion}}
+            </div>
+          </td>
+          <td>
+            <h6 class="mb-0 text-sm">{{busqueda.autor}}</h6>
+          </td>
+          <td>
+            <button  type="button" class="btn btn-primary btn-sm">
+              Editar
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if is_paginated %}
+
+
+    
+<ul class="pagination">
+<li class="page-item">
+{% if page_obj.has_previous %}
+<li class="page-item "><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+{% else %}
+<li class="disabled page-item"><span class="page-link"> &laquo;</span></li>
+{% endif %}
+{% for i in paginator.page_range %}
+{% if page_obj.number == i %}
+<!-- <li class="page-item active"><span>{{ i }} <a class="sr-only page-link"">(current)</span></span></li> -->
+  <li class="page-item active" aria-current="page">
+    <span class="page-link">{{ i }}</span>
+  </li>
+{% else %}
+<li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+{% endif %}
+{% endfor %}
+{% if page_obj.has_next %}
+<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+{% else %}
+<li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+{% endif %}
+
+</li>
+</ul>
+{% endif %}
+
+
+    {% else %}
+    <div class="card-header pb-0">
+      <h6>Aun no se ha realizado busquedas</h6>
+    </div>
+
+    {% endif%}
+
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+
+{% endblock javascripts %}
